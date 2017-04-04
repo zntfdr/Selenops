@@ -15,7 +15,7 @@ To know more about everything above, please refer to my blog [here](https://medi
 ).
 
 ## Installation 🕸
-[Download](git clone git@github.com:zntfdr/SwiftWebCrawler/archive/master.zip) or clone the repo:
+[Download](https://github.com/zntfdr/Selenops/archive/master.zip) or clone the repo:
 
 ```
 $ git clone git@github.com:zntfdr/SwiftWebCrawler.git
