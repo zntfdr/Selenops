@@ -18,7 +18,7 @@ To know more about everything above, please refer to my blog [here](https://medi
 [Download](https://github.com/zntfdr/Selenops/archive/master.zip) or clone the repo:
 
 ```
-$ git clone git@github.com:zntfdr/SwiftWebCrawler.git
+$ git clone git@github.com:zntfdr/Selenops.git
 ```
 
 ## How to Run Selenops 🕷
