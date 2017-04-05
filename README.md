@@ -27,8 +27,8 @@ $ git clone git@github.com:zntfdr/Selenops.git
 </p>
 
 * Swift Playground<br/>Just open the ``.playground`` package with Xcode.<br/><br/>
-* Swift Script <br/>Make ``SwiftScript/Selenops.swift`` executable:<br/>``$ chmod +x SwiftScript/Selenops.swift``<br/>Run it:<br/>``$ SwiftScript/Selenops.swift``.<br/><br/>
-* 🏃[Marathon](https://github.com/johnsundell/marathon) Script<br/>Run it as any other Marathon script:<br/>``$ marathon run MarathonScript/Selenops``
+* Swift Script <br/>Make ``Script/Selenops.swift`` executable:<br/>``$ chmod +x Script/Selenops.swift``<br/>Run it:<br/>``$ Script/Selenops.swift``.<br/><br/>
+* 🏃[Marathon](https://github.com/johnsundell/marathon) Script<br/>Run it as any other Marathon script:<br/>``$ marathon run Script/Selenops``
 
 ## Author 🕸
 [Federico Zanetello](https://github.com/zntfdr) ([@zntfdr](https://twitter.com/zntfdr))
