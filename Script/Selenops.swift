@@ -81,13 +81,7 @@ func parse(document: String, url: URL) {
   collectLinks().forEach { pagesToVisit.insert($0) }
 }
 
-/**
- * April 13, 2017, added support for dynamic URL, search word, and max page visits.
- * Validate and set URL below as well as set the search word and max page visits.added
- * Max page visits is optional, it defaults to 10. If no arguments are added, then
- * the pre-defined arguments are used.
- */
-let args:[String] = CommandLine.arguments
+let args: [String] = CommandLine.arguments
 //lets check if they just use type -help or help
 if (args.count == 2 || args.count > 4) {
   print("usage: swift selenops [startUrl searchWord [maxNumberOfPagesToVisit]]")
@@ -108,7 +102,7 @@ if (args.count >= 3) {     //validate and set the word
   
   //now set max pages to search
   if (args.count == 4) {
-    if let max:Int = Int(args[3]) {
+    if let max = Int(args[3]) {
       maximumPagesToVisit = max
     }
   }
