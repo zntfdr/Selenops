@@ -82,26 +82,23 @@ func parse(document: String, url: URL) {
 }
 
 let args: [String] = CommandLine.arguments
-//lets check if they just use type -help or help
-if (args.count == 2 || args.count > 4) {
+//if they use an incorrect number of parameters, show help
+if args.count == 2 || args.count > 4 {
   print("usage: swift selenops [startUrl searchWord [maxNumberOfPagesToVisit]]")
   print("\t-Either no arguments can be used, two arguments can be used (startUrl")
   print("\t and searchWord), or all three arguments can be used.")
   exit(0)
 }
 //we should have a URL and a word
-if (args.count >= 3) {     //validate and set the word
+if args.count >= 3 {     //validate and set the word
   guard let url = URL(string: args[1]) else {
     print("🚫 Bad url!")
     exit(1)
   }
+  
   startUrl = url
-  
-  //now we set the word
   wordToSearch = args[2]
-  
-  //now set max pages to search
-  if (args.count == 4) {
+  if args.count == 4 {
     if let max = Int(args[3]) {
       maximumPagesToVisit = max
     }
