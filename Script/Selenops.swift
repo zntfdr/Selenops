@@ -9,14 +9,14 @@
 import Foundation
 
 // Input your parameters here
-var startUrl = URL(string: "https://developer.apple.com/swift/")!
+let startUrl: URL
 var wordToSearch = "Swift"
 var maximumPagesToVisit = 10
 
 // Crawler Parameters
 let semaphore = DispatchSemaphore(value: 0)
 var visitedPages: Set<URL> = []
-var pagesToVisit: Set<URL> = [startUrl] //originally set this to startURL, set below for dynamic page setting
+var pagesToVisit: Set<URL> = []
 
 // Crawler Core
 func crawl() {
@@ -81,22 +81,6 @@ func parse(document: String, url: URL) {
   collectLinks().forEach { pagesToVisit.insert($0) }
 }
 
-func validateUrl(urlString: String) -> Bool {
-  // create NSURL instance
-  if NSURL(string: urlString) != nil {
-    // check if your application can open the NSURL instance
-    return true
-  }
-  return false
-}
-
-//error out from bad parameters
-func errorOut(message: String) {
-  print("🚫 Error: \(message)");
-  exit(1);
-}
-
-
 /**
  * April 13, 2017, added support for dynamic URL, search word, and max page visits.
  * Validate and set URL below as well as set the search word and max page visits.added
@@ -105,22 +89,19 @@ func errorOut(message: String) {
  */
 let args:[String] = CommandLine.arguments
 //lets check if they just use type -help or help
-if (args.count == 2) {
-  if args[1] == "help" || args[1] == "-help" {
-    print("usage: swift selenops [startUrl searchWord [maxNumberOfPagesToVisit]]");
-    print("\t-Either no arguments can be used, two arguments can be used (startUrl");
-    print("\t and searchWord), or all three arguments can be used.");
-    exit(0);
-  }
+if (args.count == 2 || args.count > 4) {
+  print("usage: swift selenops [startUrl searchWord [maxNumberOfPagesToVisit]]");
+  print("\t-Either no arguments can be used, two arguments can be used (startUrl");
+  print("\t and searchWord), or all three arguments can be used.");
+  exit(0);
 }
 //we should have a URL and a word
 if (args.count >= 3) {     //validate and set the word
-  if validateUrl(urlString: args[1]) {
-    startUrl = URL(string: args[1])!
-  } else {
-    //exits application
-    errorOut(message: "Bad URL!");
+  guard let url = URL(string: args[1]) else {
+    print("🚫 Bad url!")
+    exit(1)
   }
+  startUrl = url
   
   //now we set the word
   wordToSearch = args[2];
@@ -131,9 +112,11 @@ if (args.count >= 3) {     //validate and set the word
       maximumPagesToVisit = max
     }
   }
-  
-  pagesToVisit = [startUrl] //we need to set it again because we have changed the startUrl
+} else {
+  startUrl = URL(string: "https://developer.apple.com/swift/")! //sample URL
 }
+
+pagesToVisit = [startUrl] //set to default or whatever input comes from parameters
 
 crawl()
 semaphore.wait()
