@@ -9,14 +9,14 @@
 import Foundation
 
 // Input your parameters here
-let startUrl = URL(string: "https://developer.apple.com/swift/")!
-let wordToSearch = "Swift"
-let maximumPagesToVisit = 10
+let startUrl: URL
+var wordToSearch = "Swift"
+var maximumPagesToVisit = 10
 
 // Crawler Parameters
 let semaphore = DispatchSemaphore(value: 0)
 var visitedPages: Set<URL> = []
-var pagesToVisit: Set<URL> = [startUrl]
+var pagesToVisit: Set<URL> = []
 
 // Crawler Core
 func crawl() {
@@ -80,6 +80,34 @@ func parse(document: String, url: URL) {
   find(word: wordToSearch)
   collectLinks().forEach { pagesToVisit.insert($0) }
 }
+
+let args: [String] = CommandLine.arguments
+//if they use an incorrect number of parameters, show help
+if args.count == 2 || args.count > 4 {
+  print("usage: swift selenops [startUrl searchWord [maxNumberOfPagesToVisit]]")
+  print("\t-Either no arguments can be used, two arguments can be used (startUrl")
+  print("\t and searchWord), or all three arguments can be used.")
+  exit(0)
+}
+//we should have a URL and a word
+if args.count >= 3 {     //validate and set the word
+  guard let url = URL(string: args[1]) else {
+    print("🚫 Bad url!")
+    exit(1)
+  }
+  
+  startUrl = url
+  wordToSearch = args[2]
+  if args.count == 4 {
+    if let max = Int(args[3]) {
+      maximumPagesToVisit = max
+    }
+  }
+} else {
+  startUrl = URL(string: "https://developer.apple.com/swift/")! //sample URL
+}
+
+pagesToVisit = [startUrl] //set to default or whatever input comes from parameters
 
 crawl()
 semaphore.wait()
