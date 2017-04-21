@@ -8,19 +8,62 @@
 
 import Foundation
 
-// Input your parameters here
-let startUrl: URL
-var wordToSearch = "Swift"
-var maximumPagesToVisit = 10
+extension Collection where Indices.Iterator.Element == Index {
+  /// Returns the element at the specified index iff it is within bounds, otherwise nil.
+  subscript (safe index: Index) -> Generator.Element? {
+    return indices.contains(index) ? self[index] : nil
+  }
+}
+
+let defaultMaxWebpages = 10
+
+func printHelp() {
+  print("🕸 Synopsis")
+  print("\tselenops word_to_search https://your_start_url [max_pages_number]")
+  print("")
+  print("🕷 Example")
+  print("\tselenops swift https://developer.apple.com/swift/")
+  print("")
+  print("🕸 Description")
+  print("\tselenops is a simple swift web crawler that look for a word of your choosing on the web, starting from a given webpage.")
+  print("By default it will crawl \(defaultMaxWebpages) webpages, use the third optional parameter to change this behaviour")
+  print("")
+  print("🕷 Author")
+  print("\tselenops is brought to you by Federico Zanetello (@zntfdr)")
+  print("")
+  print("🕸 Reporting Bugs")
+  print("\tPlease open an issue at https://github.com/zntfdr/Selenops")
+}
+
+let args = CommandLine.arguments
+
+guard let wordToSearch: String = args[safe: 1] else {
+  printHelp()
+  exit(1)
+}
+
+let wordToSearch2: String = wordToSearch // this avoids a segmentation fault, I've filed a radar already
+
+guard let startUrlString = args[safe: 2] else {
+  print("💥 Missing start url")
+  exit(1)
+}
+
+guard let startUrl = URL(string: startUrlString) else {
+  print("🚫 Bad url!")
+  exit(1)
+}
+
+let maximumPagesToVisit = Int(args[safe: 3] ?? "") ?? defaultMaxWebpages
 
 // Crawler Parameters
 let semaphore = DispatchSemaphore(value: 0)
 var visitedPages: Set<URL> = []
-var pagesToVisit: Set<URL> = []
+var pagesToVisit: Set<URL> = [startUrl]
 
 // Crawler Core
 func crawl() {
-  guard visitedPages.count <= maximumPagesToVisit else {
+  guard visitedPages.count < maximumPagesToVisit else {
     print("🏁 Reached max number of pages to visit")
     semaphore.signal()
     return
@@ -76,38 +119,9 @@ func parse(document: String, url: URL) {
     let matches = getMatches(pattern: pattern, text: document)
     return matches.flatMap { URL(string: $0) }
   }
-  
-  find(word: wordToSearch)
+  find(word: wordToSearch2)
   collectLinks().forEach { pagesToVisit.insert($0) }
 }
-
-let args: [String] = CommandLine.arguments
-//if they use an incorrect number of parameters, show help
-if args.count == 2 || args.count > 4 {
-  print("usage: swift selenops [startUrl searchWord [maxNumberOfPagesToVisit]]")
-  print("\t-Either no arguments can be used, two arguments can be used (startUrl")
-  print("\t and searchWord), or all three arguments can be used.")
-  exit(0)
-}
-//we should have a URL and a word
-if args.count >= 3 {     //validate and set the word
-  guard let url = URL(string: args[1]) else {
-    print("🚫 Bad url!")
-    exit(1)
-  }
-  
-  startUrl = url
-  wordToSearch = args[2]
-  if args.count == 4 {
-    if let max = Int(args[3]) {
-      maximumPagesToVisit = max
-    }
-  }
-} else {
-  startUrl = URL(string: "https://developer.apple.com/swift/")! //sample URL
-}
-
-pagesToVisit = [startUrl] //set to default or whatever input comes from parameters
 
 crawl()
 semaphore.wait()
