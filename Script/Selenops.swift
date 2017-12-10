@@ -8,9 +8,9 @@
 
 import Foundation
 
-extension Collection where Indices.Iterator.Element == Index {
+extension Collection {
   /// Returns the element at the specified index iff it is within bounds, otherwise nil.
-  subscript (safe index: Index) -> Generator.Element? {
+  subscript (safe index: Index) -> Iterator.Element? {
     return indices.contains(index) ? self[index] : nil
   }
 }
@@ -18,21 +18,23 @@ extension Collection where Indices.Iterator.Element == Index {
 let defaultMaxWebpages = 10
 
 func printHelp() {
-  print("🕸 Synopsis")
-  print("\tselenops word_to_search https://your_start_url [max_pages_number]")
-  print("")
-  print("🕷 Example")
-  print("\tselenops swift https://developer.apple.com/swift/")
-  print("")
-  print("🕸 Description")
-  print("\tselenops is a simple swift web crawler that look for a word of your choosing on the web, starting from a given webpage.")
-  print("By default it will crawl \(defaultMaxWebpages) webpages, use the third optional parameter to change this behaviour")
-  print("")
-  print("🕷 Author")
-  print("\tselenops is brought to you by Federico Zanetello (@zntfdr)")
-  print("")
-  print("🕸 Reporting Bugs")
-  print("\tPlease open an issue at https://github.com/zntfdr/Selenops")
+  print("""
+    🕸 Synopsis
+      selenops word_to_search https://your_start_url [max_pages_number]
+    
+    🕷 Example
+      selenops swift https://developer.apple.com/swift/
+    
+    🕸 Description
+      selenops is a simple swift web crawler that look for a word of your choosing on the web, starting from a given webpage.
+      By default it will crawl \(defaultMaxWebpages) webpages, use the third optional parameter to change this behaviour
+    
+    🕷 Author
+      selenops is brought to you by Federico Zanetello (@zntfdr)
+    
+    🕸 Reporting Bugs
+      Please open an issue at https://github.com/zntfdr/Selenops
+    """)
 }
 
 let args = CommandLine.arguments
@@ -104,21 +106,11 @@ func parse(document: String, url: URL) {
   }
   
   func collectLinks() -> [URL] {
-    func getMatches(pattern: String, text: String) -> [String] {
-      // used to remove the 'href="' & '"' from the matches
-      func trim(url: String) -> String {
-        return String(url.characters.dropLast()).substring(from: url.index(url.startIndex, offsetBy: "href=\"".characters.count))
-      }
-      
-      let regex = try! NSRegularExpression(pattern: pattern, options: [.caseInsensitive])
-      let matches = regex.matches(in: text, options: [.reportCompletion], range: NSRange(location: 0, length: text.characters.count))
-      return matches.map { trim(url: (text as NSString).substring(with: $0.range)) }
-    }
-    
-    let pattern = "href=\"(http://.*?|https://.*?)\""
-    let matches = getMatches(pattern: pattern, text: document)
-    return matches.flatMap { URL(string: $0) }
+    let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+    let matches = detector?.matches(in: document, options: [], range: NSRange(location: 0, length: document.utf16.count))
+    return matches?.flatMap { $0.url } ?? []
   }
+  
   find(word: wordToSearch2)
   collectLinks().forEach { pagesToVisit.insert($0) }
 }

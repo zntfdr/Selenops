@@ -57,20 +57,9 @@ func parse(document: String, url: URL) {
   }
   
   func collectLinks() -> [URL] {
-    func getMatches(pattern: String, text: String) -> [String] {
-      // used to remove the 'href="' & '"' from the matches
-      func trim(url: String) -> String {
-        return String(url.characters.dropLast()).substring(from: url.index(url.startIndex, offsetBy: "href=\"".characters.count))
-      }
-      
-      let regex = try! NSRegularExpression(pattern: pattern, options: [.caseInsensitive])
-      let matches = regex.matches(in: text, options: [.reportCompletion], range: NSRange(location: 0, length: text.characters.count))
-      return matches.map { trim(url: (text as NSString).substring(with: $0.range)) }
-    }
-    
-    let pattern = "href=\"(http://.*?|https://.*?)\""
-    let matches = getMatches(pattern: pattern, text: document)
-    return matches.flatMap { URL(string: $0) }
+    let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+    let matches = detector?.matches(in: document, options: [], range: NSRange(location: 0, length: document.utf16.count))
+    return matches?.flatMap { $0.url } ?? []
   }
   
   find(word: wordToSearch)
