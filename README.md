@@ -11,8 +11,7 @@ This repository contains three ways to use Selenops:
 * A Swift Script
 * A 🏃[Marathon](https://github.com/johnsundell/marathon) Script
 
-To know more about everything above, please refer to my blog [here](https://medium.com/swiftly-swift/how-to-make-a-web-crawler-in-swift-3ed4977a181b
-).
+To know more about everything above, please refer to my blog [here](https://www.fivestars.blog/code/build-web-crawler-swift.html).
 
 ## Installation 🕸
 [Download](https://github.com/zntfdr/Selenops/archive/master.zip) or clone the repo:
