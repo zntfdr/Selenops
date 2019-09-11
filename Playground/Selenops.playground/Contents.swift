@@ -59,7 +59,7 @@ func parse(document: String, url: URL) {
   func collectLinks() -> [URL] {
     let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
     let matches = detector?.matches(in: document, options: [], range: NSRange(location: 0, length: document.utf16.count))
-    return matches?.flatMap { $0.url } ?? []
+    return matches?.compactMap { $0.url } ?? []
   }
   
   find(word: wordToSearch)
