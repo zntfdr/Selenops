@@ -36,11 +36,10 @@ func crawl() {
 func visit(page url: URL) {
   visitedPages.insert(url)
   
-  let task = URLSession.shared.dataTask(with: url) { data, response, error in
+  let task = URLSession.shared.dataTask(with: url) { data, response, _ in
     defer { crawl() }
     guard
       let data = data,
-      error == nil,
       let document = String(data: data, encoding: .utf8) else { return }
     parse(document: document, url: url)
   }
@@ -50,20 +49,21 @@ func visit(page url: URL) {
 }
 
 func parse(document: String, url: URL) {
-  func find(word: String) {
-    if document.contains(word) {
-      print("✅ Word '\(word)' found at page \(url)")
-    }
+  func find(word: String, from document: String) {
+    guard document.contains(word) else { return }
+    print("✅ Word '\(word)' found at page \(url)")
   }
   
-  func collectLinks() -> [URL] {
-    let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
-    let matches = detector?.matches(in: document, options: [], range: NSRange(location: 0, length: document.utf16.count))
+  func collectLinks(from document: String) -> [URL] {
+    let types: NSTextCheckingResult.CheckingType = .link
+    let detector = try? NSDataDetector(types: types.rawValue)
+    let range = NSRange(0..<document.count)
+    let matches = detector?.matches(in: document, options: [], range: range)
     return matches?.compactMap { $0.url } ?? []
   }
   
-  find(word: wordToSearch)
-  collectLinks().forEach { pagesToVisit.insert($0) }
+  find(word: wordToSearch, from: document)
+  collectLinks(from: document).forEach { pagesToVisit.insert($0) }
 }
 
 crawl()
