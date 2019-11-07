@@ -5,7 +5,7 @@
 
 Welcome to **Selenops**, a stupid simple Swift Web Crawler.
 
-This repository contains three ways to use Selenops:
+This repository contains two ways to run Selenops:
 
 * A Swift Playground
 * A Swift Script
@@ -24,8 +24,8 @@ $ git clone git@github.com:zntfdr/Selenops.git
     <img src="screenshot.png" width="680" max-width="90%" alt="Swift Web Crawler in action" />
 </p>
 
-* Swift Playground  
-  Just open the ``.playground`` package with Xcode.
+* Xcode Swift Playground  
+  Open the ``.playground`` project with Xcode.
   
 * Swift Script  
   Make ``Script/Selenops.swift`` executable: ``$ chmod +x Script/Selenops.swift``  
