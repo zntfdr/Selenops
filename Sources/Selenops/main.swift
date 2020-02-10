@@ -1,4 +1,30 @@
 import Foundation
+import TSCUtility
+
+let parser = ArgumentParser(
+  usage: "selenops",
+  overview: "Searches for the given word on the web"
+)
+
+let pageArgument: OptionArgument<String> = parser.add(
+  option: "--page",
+  shortName: "-p",
+  kind: String.self,
+  usage: "The starting URL"
+)
+
+let wordArgument: OptionArgument<String> = parser.add(
+  option: "--word",
+  shortName: "-w",
+  kind: String.self,
+  usage: "The word to look for"
+)
+
+let pageNumberArgument: OptionArgument<Int> = parser.add(
+  option: "--number",
+  shortName: "-n",
+  kind: Int.self,
+  usage: "The maximum number of pages to visit")
 
 // Input your parameters here
 let startUrl = URL(string: "https://developer.apple.com/swift/")!
@@ -6,8 +32,8 @@ let wordToSearch = "Swift"
 let maximumPagesToVisit = 10
 
 // Crawler Parameters
-var visitedPages: Set<URL> = []
-var pagesToVisit: Set<URL> = [startUrl]
+var visitedPages: Set<Foundation.URL> = []
+var pagesToVisit: Set<Foundation.URL> = [startUrl]
 
 // Crawler Core
 func crawl() {
@@ -26,7 +52,7 @@ func crawl() {
   }
 }
 
-func visit(page url: URL) {
+func visit(page url: Foundation.URL) {
   visitedPages.insert(url)
 
   let task = URLSession.shared.dataTask(with: url) { data, response, _ in
@@ -41,13 +67,13 @@ func visit(page url: URL) {
   task.resume()
 }
 
-func parse(document: String, url: URL) {
+func parse(document: String, url: Foundation.URL) {
   func find(word: String, from document: String) {
     guard document.contains(word) else { return }
     print("✅ Word '\(word)' found at page \(url)")
   }
 
-  func collectLinks(from document: String) -> [URL] {
+  func collectLinks(from document: String) -> [Foundation.URL] {
     let types: NSTextCheckingResult.CheckingType = .link
     let detector = try? NSDataDetector(types: types.rawValue)
     let range = NSRange(0..<document.count)
