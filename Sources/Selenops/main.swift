@@ -26,10 +26,25 @@ let pageNumberArgument: OptionArgument<Int> = parser.add(
   kind: Int.self,
   usage: "The maximum number of pages to visit")
 
-// Input your parameters here
-let startUrl = URL(string: "https://developer.apple.com/swift/")!
-let wordToSearch = "Swift"
-let maximumPagesToVisit = 10
+do {
+  let arguments = Array(CommandLine.arguments.dropFirst())
+  let parsedArguments = try parser.parse(arguments)
+
+  let startUrl = URL(string: "https://developer.apple.com/swift/")!
+  let wordToSearch = "Swift"
+  let maximumPagesToVisit = 10
+
+} catch ArgumentParserError.expectedValue(let value) {
+    print("Missing value for argument \(value).")
+} catch ArgumentParserError.expectedArguments(let parser, let stringArray) {
+    print("Parser: \(parser) Missing arguments: \(stringArray.joined()).")
+} catch {
+    print(error.localizedDescription)
+}
+
+
+/*
+
 
 // Crawler Parameters
 var visitedPages: Set<Foundation.URL> = []
@@ -93,3 +108,4 @@ URLCache.shared = URLCache(memoryCapacity: 0, diskCapacity: 0, diskPath: nil)
 
 // needed for asychronous calls
 dispatchMain()
+*/
