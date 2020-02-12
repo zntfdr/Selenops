@@ -11,10 +11,11 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "selenops",
-            dependencies: ["SwiftToolsSupport"]),
+            name: "selenopsCLI",
+            dependencies: ["selenopsCore", "SwiftToolsSupport"]),
+        .target(name: "selenopsCore"),
         .testTarget(
             name: "selenopsTests",
-            dependencies: ["selenops"]),
+            dependencies: ["selenopsCLI"]),
     ]
 )
