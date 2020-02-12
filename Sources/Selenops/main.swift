@@ -30,10 +30,11 @@ do {
   let arguments = Array(CommandLine.arguments.dropFirst())
   let parsedArguments = try parser.parse(arguments)
 
-  let startUrl = URL(string: "https://developer.apple.com/swift/")!
-  let wordToSearch = "Swift"
-  let maximumPagesToVisit = 10
+  let startUrl = parsedArguments.get(pageArgument) ?? URL(string: "https://developer.apple.com/swift/")!
+  let wordToSearch = parsedArguments.get(wordArgument) ?? "Swift"
+  let maximumPagesToVisit = parsedArguments.get(pageNumberArgument) ?? 10
 
+  print(startUrl, wordToSearch, maximumPagesToVisit)
 } catch ArgumentParserError.expectedValue(let value) {
     print("Missing value for argument \(value).")
 } catch ArgumentParserError.expectedArguments(let parser, let stringArray) {
