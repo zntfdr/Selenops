@@ -39,7 +39,7 @@ open class Crawler {
   func visit(page url: Foundation.URL) {
     visitedPages.insert(url)
 
-    let task = URLSession.shared.dataTask(with: url) { data, response, _ in
+    let task = URLSession.shared.dataTask(with: url) { data, _, _ in
       defer { self.crawl() }
       guard
         let data = data,

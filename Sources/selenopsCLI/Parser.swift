@@ -56,4 +56,3 @@ final class Parser {
     return Parameters(startUrl: startUrl, wordToSearch: wordToSearch, maximumPagesToVisit: maximumPagesToVisit)
   }
 }
-

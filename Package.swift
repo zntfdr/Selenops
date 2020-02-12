@@ -7,7 +7,7 @@ let package = Package(
     name: "selenops",
     dependencies: [
       .package(url: "https://github.com/apple/swift-tools-support-core.git",
-               from: "0.0.1"),
+               from: "0.0.1")
     ],
     targets: [
         .target(name: "SelenopsCore"),
@@ -16,6 +16,6 @@ let package = Package(
             dependencies: ["SelenopsCore", "SwiftToolsSupport"]),
         .testTarget(
             name: "selenopsTests",
-            dependencies: ["selenopsCLI"]),
+            dependencies: ["selenopsCLI"])
     ]
 )
