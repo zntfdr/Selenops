@@ -19,7 +19,10 @@ open class Crawler {
     self.wordToSearch = word
   }
 
-  // Crawler Core
+  public func start() {
+    crawl()
+  }
+
   func crawl() {
     guard visitedPages.count <= maximumPagesToVisit else {
       print("🏁 Reached max number of pages to visit")

@@ -13,5 +13,8 @@ final class Executor {
     let crawler = Crawler(startURL: parameters.startUrl,
                           maximumPagesToVisit: parameters.maximumPagesToVisit,
                           wordToSearch: parameters.wordToSearch)
+    crawler.start()
+
+    dispatchMain()
   }
 }
