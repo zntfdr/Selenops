@@ -6,10 +6,10 @@ let parser = ArgumentParser(
   overview: "Searches for the given word on the web"
 )
 
-let pageArgument: OptionArgument<String> = parser.add(
+let pageArgument: OptionArgument<Foundation.URL> = parser.add(
   option: "--page",
   shortName: "-p",
-  kind: String.self,
+  kind: Foundation.URL.self,
   usage: "The starting URL"
 )
 
@@ -109,3 +109,4 @@ URLCache.shared = URLCache(memoryCapacity: 0, diskCapacity: 0, diskPath: nil)
 // needed for asychronous calls
 dispatchMain()
 */
+
