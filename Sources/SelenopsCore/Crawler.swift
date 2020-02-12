@@ -13,7 +13,7 @@ open class Crawler {
   private lazy var visitedPages: Set<URL> = []
   private var pagesToVisit: Set<URL> = []
 
-  init(startURL: URL, maximumPagesToVisit: Int, wordToSearch word: String) {
+  public init(startURL: URL, maximumPagesToVisit: Int, wordToSearch word: String) {
     self.maximumPagesToVisit = maximumPagesToVisit
     self.pagesToVisit = [startURL]
     self.wordToSearch = word

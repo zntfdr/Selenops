@@ -6,9 +6,12 @@
 //
 
 import Foundation
+import SelenopsCore
 
 final class Executor {
   func run(parameters: Parameters) {
-    print(parameters)
+    let crawler = Crawler(startURL: parameters.startUrl,
+                          maximumPagesToVisit: parameters.maximumPagesToVisit,
+                          wordToSearch: parameters.wordToSearch)
   }
 }
