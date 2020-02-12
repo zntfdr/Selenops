@@ -45,8 +45,6 @@ do {
 
 
 /*
-
-
 // Crawler Parameters
 var visitedPages: Set<Foundation.URL> = []
 var pagesToVisit: Set<Foundation.URL> = [startUrl]
