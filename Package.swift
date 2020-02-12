@@ -10,10 +10,10 @@ let package = Package(
                from: "0.0.1"),
     ],
     targets: [
-        .target(name: "selenopsCore"),
+        .target(name: "SelenopsCore"),
         .target(
             name: "selenopsCLI",
-            dependencies: ["selenopsCore", "SwiftToolsSupport"]),
+            dependencies: ["SelenopsCore", "SwiftToolsSupport"]),
         .testTarget(
             name: "selenopsTests",
             dependencies: ["selenopsCLI"]),
