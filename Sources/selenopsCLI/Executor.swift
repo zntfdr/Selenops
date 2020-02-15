@@ -12,7 +12,7 @@ final class Executor {
   func run(parameters: Parameters) {
     print("✅ Searching for: \(parameters.wordToSearch)")
     print("✅ Starting from: \(parameters.startUrl.absoluteString)")
-    print("✅ Maximum numbe of pages to visit: \(parameters.maximumPagesToVisit)")
+    print("✅ Maximum number of pages to visit: \(parameters.maximumPagesToVisit)")
 
     let visitingCallback: (URL) -> Void = { url in
       print("🔎 Visiting: \(url)")
