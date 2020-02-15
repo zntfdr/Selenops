@@ -15,6 +15,7 @@ public class Crawler {
   let visitingCallback: ((URL) -> Void)?
   let wordFoundCallback: (URL) -> Void
   let completion: (Int) -> Void
+  var currentTask: URLSessionDataTask?
 
   public init(
     startURL: URL,
@@ -36,6 +37,11 @@ public class Crawler {
     crawl()
   }
 
+  public func cancel() {
+    currentTask?.cancel()
+    completion(visitedPages.count)
+  }
+
   func crawl() {
     guard
       visitedPages.count < maximumPagesToVisit,
@@ -54,7 +60,7 @@ public class Crawler {
   func visit(page url: Foundation.URL) {
     visitedPages.insert(url)
 
-    let task = URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+    currentTask = URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
       defer { self?.crawl() }
       guard
         let data = data,
@@ -63,7 +69,7 @@ public class Crawler {
     }
 
     visitingCallback?(url)
-    task.resume()
+    currentTask?.resume()
   }
 
   func parse(document: String, url: Foundation.URL) {
