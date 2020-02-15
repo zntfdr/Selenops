@@ -14,24 +14,28 @@ final class Executor {
     print("✅ Starting from: \(parameters.startUrl.absoluteString)")
     print("✅ Maximum numbe of pages to visit: \(parameters.maximumPagesToVisit)")
 
-    let publisher = CrawlerPublisher(
-      startURL: parameters.startUrl,
-      wordToSearch: parameters.wordToSearch,
-      maxNumberOfPagesToVisit: parameters.maximumPagesToVisit
-    )
+    let visitingCallback: (URL) -> Void = { url in
+      print("🔎 Visiting: \(url)")
+    }
 
-    let cancellable = publisher
-      .sink(receiveCompletion: { completion in
-        switch completion {
-        case .finished:
-          exit(EXIT_SUCCESS)
-        case .failure(let failure):
-          print("💥 An error occurred: \(failure)")
-          exit(EXIT_FAILURE)
-        }
-    }) { url in
+    let wordFoundCallback: (URL) -> Void = { url in
       print("✅ Word found at: \(url.absoluteString)")
     }
+
+    let completion: () -> Void = {
+      exit(EXIT_SUCCESS)
+    }
+
+    let crawler = Crawler(
+      startURL: parameters.startUrl,
+      maximumPagesToVisit: parameters.maximumPagesToVisit,
+      wordToSearch: parameters.wordToSearch,
+      visitingCallback: visitingCallback,
+      wordFoundCallback: wordFoundCallback,
+      completion: completion
+    )
+
+    crawler.start()
 
     dispatchMain()
   }
