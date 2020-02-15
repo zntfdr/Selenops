@@ -10,8 +10,9 @@ import SelenopsCore
 
 final class Executor {
   func run(parameters: Parameters) {
-    print("✅ Searching for '\(parameters.wordToSearch)'")
-    print("✅ Starting from '\(parameters.startUrl.absoluteString)'")
+    print("✅ Searching for: \(parameters.wordToSearch)")
+    print("✅ Starting from: \(parameters.startUrl.absoluteString)")
+    print("✅ Maximum numbe of pages to visit: \(parameters.maximumPagesToVisit)")
 
     let publisher = CrawlerPublisher(
       startURL: parameters.startUrl,
@@ -21,16 +22,16 @@ final class Executor {
 
     let cancellable = publisher
       .sink(receiveCompletion: { completion in
-      print("it ded")
-        exit(EXIT_SUCCESS)
+        switch completion {
+        case .finished:
+          exit(EXIT_SUCCESS)
+        case .failure(let failure):
+          print("💥 An error occurred: \(failure)")
+          exit(EXIT_FAILURE)
+        }
     }) { url in
-      print("✅ word found at \(url.absoluteString)")
+      print("✅ Word found at: \(url.absoluteString)")
     }
-
-    //    let crawler = Crawler(startURL: parameters.startUrl,
-    //                          maximumPagesToVisit: parameters.maximumPagesToVisit,
-    //                          wordToSearch: parameters.wordToSearch)
-    //    crawler.start()
 
     dispatchMain()
   }

@@ -121,7 +121,7 @@ class Crawler {
     func find(word: String, from document: String) {
       guard document.contains(word) else { return }
       callback(url)
-      print("✅ Word '\(word)' found at page \(url)")
+      //print("✅ Word '\(word)' found at page \(url)")
     }
 
     func collectLinks(from document: String) -> [Foundation.URL] {
