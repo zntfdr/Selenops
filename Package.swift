@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "selenops",
+    name: "Selenops",
     products: [
         .library(name: "Selenops", targets: ["SelenopsCore"]),
         .executable(name: "selenops", targets: ["selenopsCLI"])
