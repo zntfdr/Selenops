@@ -13,6 +13,7 @@ public class CrawlerSubscription<T: Subscriber>: Subscription where T.Input == U
   let startURL: URL
   let wordToSearch: String
   let maxNumberOfPagesToVisit: Int
+  var crawler: Crawler?
 
   init(subscriber: T, startURL: URL, wordToSearch: String, maxNumberOfPagesToVisit: Int) {
     self.subscriber = subscriber
@@ -27,10 +28,10 @@ public class CrawlerSubscription<T: Subscriber>: Subscription where T.Input == U
     }
 
     // demand.max
-    let crawler = Crawler(startURL: startURL, maximumPagesToVisit: maxNumberOfPagesToVisit, wordToSearch: wordToSearch, callback: callback) {
+    crawler = Crawler(startURL: startURL, maximumPagesToVisit: maxNumberOfPagesToVisit, wordToSearch: wordToSearch, callback: callback) {
       self.subscriber?.receive(completion: .finished)
     }
-    crawler.crawl()
+    crawler.start()
   }
 
   public func cancel() {
