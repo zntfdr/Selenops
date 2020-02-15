@@ -57,12 +57,12 @@ public class Crawler {
   func visit(page url: Foundation.URL) {
     visitedPages.insert(url)
 
-    let task = URLSession.shared.dataTask(with: url) { data, _, _ in
-      defer { self.crawl() }
+    let task = URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+      defer { self?.crawl() }
       guard
         let data = data,
         let document = String(data: data, encoding: .utf8) else { return }
-      self.parse(document: document, url: url)
+      self?.parse(document: document, url: url)
     }
 
     visitingCallback?(url)
