@@ -5,18 +5,73 @@
 //  Created by Federico Zanetello on 2/12/20.
 //
 
+import Combine
 import Foundation
 
-open class Crawler {
+public class CrawlerSubscription<T: Subscriber>: Subscription where T.Input == URL {
+  private var subscriber: T?
+  let startURL: URL
+  let wordToSearch: String
+  let maxNumberOfPagesToVisit: Int
+
+  init(subscriber: T, startURL: URL, wordToSearch: String, maxNumberOfPagesToVisit: Int) {
+    self.subscriber = subscriber
+    self.startURL = startURL
+    self.wordToSearch = wordToSearch
+    self.maxNumberOfPagesToVisit = maxNumberOfPagesToVisit
+  }
+
+  public func request(_ demand: Subscribers.Demand) {
+    // demand.max
+    let crawler = Crawler(startURL: startURL, maximumPagesToVisit: maxNumberOfPagesToVisit, wordToSearch: wordToSearch) { url in
+      self.subscriber?.receive(url)
+    }
+    crawler.crawl()
+  }
+
+  public func cancel() {
+    subscriber = nil
+  }
+}
+
+public enum CrawlerError: Error {
+  case network(Error)
+}
+
+public struct CrawlerPublisher: Publisher {
+  let startURL: URL
+  let wordToSearch: String
+  let maxNumberOfPagesToVisit: Int
+
+  public init(startURL: URL, wordToSearch: String, maxNumberOfPagesToVisit: Int) {
+    self.startURL = startURL
+    self.wordToSearch = wordToSearch
+    self.maxNumberOfPagesToVisit = maxNumberOfPagesToVisit
+  }
+
+  public func receive<S>(subscriber: S) where S: Subscriber, S.Input == URL {
+    let subscription = CrawlerSubscription(subscriber: subscriber, startURL: startURL, wordToSearch: wordToSearch, maxNumberOfPagesToVisit: maxNumberOfPagesToVisit)
+    // Tells the subscriber that it has successfully subscribed to the publisher
+    // and may request items.
+    subscriber.receive(subscription: subscription)
+  }
+
+  public typealias Output = URL
+  public typealias Failure = CrawlerError
+}
+
+class Crawler {
   private let maximumPagesToVisit: Int
   private let wordToSearch: String
   private lazy var visitedPages: Set<URL> = []
   private var pagesToVisit: Set<URL> = []
+  private let callback: (URL) -> Void
 
-  public init(startURL: URL, maximumPagesToVisit: Int, wordToSearch word: String) {
+  public init(startURL: URL, maximumPagesToVisit: Int, wordToSearch word: String, callback: @escaping (URL) -> Void) {
     self.maximumPagesToVisit = maximumPagesToVisit
     self.pagesToVisit = [startURL]
     self.wordToSearch = word
+    self.callback = callback
   }
 
   public func start() {
@@ -57,6 +112,7 @@ open class Crawler {
   func parse(document: String, url: Foundation.URL) {
     func find(word: String, from document: String) {
       guard document.contains(word) else { return }
+      callback(url)
       print("✅ Word '\(word)' found at page \(url)")
     }
 
