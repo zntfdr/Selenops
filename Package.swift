@@ -5,6 +5,10 @@ import PackageDescription
 
 let package = Package(
     name: "selenops",
+    products: [
+        .library(name: "Selenops", targets: ["SelenopsCore"]),
+        .executable(name: "selenops", targets: ["selenopsCLI"])
+    ],
     dependencies: [
       .package(url: "https://github.com/apple/swift-tools-support-core.git",
                from: "0.0.1")
