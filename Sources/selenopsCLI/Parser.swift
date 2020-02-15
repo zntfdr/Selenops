@@ -45,7 +45,8 @@ final class Parser {
       option: "--number",
       shortName: "-n",
       kind: Int.self,
-      usage: "The maximum number of pages to visit")
+      usage: "The maximum number of pages to visit"
+    )
 
     let parsedArguments: ArgumentParser.Result = try parser.parse(arguments)
 
@@ -53,6 +54,10 @@ final class Parser {
     let wordToSearch = parsedArguments.get(wordArgument) ?? "Swift"
     let maximumPagesToVisit = parsedArguments.get(pageNumberArgument) ?? 10
 
-    return Parameters(startUrl: startUrl, wordToSearch: wordToSearch, maximumPagesToVisit: maximumPagesToVisit)
+    return Parameters(
+      startUrl: startUrl,
+      wordToSearch: wordToSearch,
+      maximumPagesToVisit: maximumPagesToVisit
+    )
   }
 }
