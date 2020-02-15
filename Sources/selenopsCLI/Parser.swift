@@ -23,15 +23,15 @@ final class Parser {
   public func parse() throws -> Parameters {
     // Initializes and sets up the `ArgumentParser` instance.
     let parser = ArgumentParser(
-      usage: "[-p https://...] [-w wordToSearch] [-m maxNumberOfVisitedPages]",
+      usage: "[-s https://...] [-w wordToSearch] [-m maxNumberOfVisitedPages]",
       overview: "Searches for the given word on the web"
     )
 
     let pageArgument: OptionArgument<Foundation.URL> = parser.add(
-      option: "--page",
-      shortName: "-p",
+      option: "--start",
+      shortName: "-s",
       kind: Foundation.URL.self,
-      usage: "The starting URL"
+      usage: "The starting page URL (must contain http:// or https://)"
     )
 
     let wordArgument: OptionArgument<String> = parser.add(
@@ -42,7 +42,7 @@ final class Parser {
     )
 
     let pageNumberArgument: OptionArgument<Int> = parser.add(
-      option: "--maxPages",
+      option: "--max",
       shortName: "-m",
       kind: Int.self,
       usage: "The maximum number of pages to visit"
