@@ -13,10 +13,17 @@ public class Crawler {
   private lazy var visitedPages: Set<URL> = []
   private var pagesToVisit: Set<URL> = []
   private let visitingCallback: ((URL) -> Void)?
-  private let wordFoundCallback: ((URL) -> Void)?
-  private let completion: (() -> Void)?
+  private let wordFoundCallback: (URL) -> Void
+  private let completion: () -> Void
 
-  public init(startURL: URL, maximumPagesToVisit: Int, wordToSearch word: String, visitingCallback: ((URL) -> Void)?, wordFoundCallback: ((URL) -> Void)?, completion: (() -> Void)?) {
+  public init(
+    startURL: URL,
+    maximumPagesToVisit: Int,
+    wordToSearch word: String,
+    visitingCallback: ((URL) -> Void)?,
+    wordFoundCallback: @escaping (URL) -> Void,
+    completion: @escaping () -> Void
+  ) {
     self.maximumPagesToVisit = maximumPagesToVisit
     self.pagesToVisit = [startURL]
     self.wordToSearch = word
@@ -31,12 +38,12 @@ public class Crawler {
 
   func crawl() {
     guard visitedPages.count <= maximumPagesToVisit else {
-      completion?()
+      completion()
 //      print("🏁 Reached max number of pages to visit")
       return
     }
     guard let pageToVisit = pagesToVisit.popFirst() else {
-      completion?()
+      completion()
 //      print("🏁 No more pages to visit")
       return
     }
@@ -65,7 +72,7 @@ public class Crawler {
   func parse(document: String, url: Foundation.URL) {
     func find(word: String, from document: String) {
       guard document.contains(word) else { return }
-      wordFoundCallback?(url)
+      wordFoundCallback(url)
     }
 
     func collectLinks(from document: String) -> [Foundation.URL] {
