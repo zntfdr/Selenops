@@ -9,12 +9,12 @@ import Foundation
 
 public class Crawler {
   let maximumPagesToVisit: Int
-  private let wordToSearch: String
-  private lazy var visitedPages: Set<URL> = []
-  private var pagesToVisit: Set<URL> = []
-  private let visitingCallback: ((URL) -> Void)?
-  private let wordFoundCallback: (URL) -> Void
-  private let completion: () -> Void
+  let wordToSearch: String
+  var visitedPages: Set<URL> = []
+  var pagesToVisit: Set<URL>
+  let visitingCallback: ((URL) -> Void)?
+  let wordFoundCallback: (URL) -> Void
+  let completion: (Int) -> Void
 
   public init(
     startURL: URL,
@@ -22,7 +22,7 @@ public class Crawler {
     wordToSearch word: String,
     visitingCallback: ((URL) -> Void)?,
     wordFoundCallback: @escaping (URL) -> Void,
-    completion: @escaping () -> Void
+    completion: @escaping (Int) -> Void
   ) {
     self.maximumPagesToVisit = maximumPagesToVisit
     self.pagesToVisit = [startURL]
@@ -37,16 +37,13 @@ public class Crawler {
   }
 
   func crawl() {
-    guard visitedPages.count <= maximumPagesToVisit else {
-      completion()
-//      print("🏁 Reached max number of pages to visit")
+    guard
+      visitedPages.count < maximumPagesToVisit,
+      let pageToVisit = pagesToVisit.popFirst() else {
+      completion(visitedPages.count)
       return
     }
-    guard let pageToVisit = pagesToVisit.popFirst() else {
-      completion()
-//      print("🏁 No more pages to visit")
-      return
-    }
+
     if visitedPages.contains(pageToVisit) {
       crawl()
     } else {

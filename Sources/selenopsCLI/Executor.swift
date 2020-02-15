@@ -22,7 +22,8 @@ final class Executor {
       print("✅ Word found at: \(url.absoluteString)")
     }
 
-    let completion: () -> Void = {
+    let completion: (Int) -> Void = { visitedPagesNumber in
+      print("🏁 Visited pages: \(visitedPagesNumber)")
       exit(EXIT_SUCCESS)
     }
 
