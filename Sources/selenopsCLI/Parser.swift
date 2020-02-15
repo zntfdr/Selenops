@@ -23,7 +23,7 @@ final class Parser {
   public func parse() throws -> Parameters {
     // Initializes and sets up the `ArgumentParser` instance.
     let parser = ArgumentParser(
-      usage: "selenops",
+      usage: "[-p https://...] [-w wordToSearch] [-m maxNumberOfVisitedPages]",
       overview: "Searches for the given word on the web"
     )
 
@@ -42,8 +42,8 @@ final class Parser {
     )
 
     let pageNumberArgument: OptionArgument<Int> = parser.add(
-      option: "--number",
-      shortName: "-n",
+      option: "--maxPages",
+      shortName: "-m",
       kind: Int.self,
       usage: "The maximum number of pages to visit"
     )
