@@ -22,9 +22,13 @@ public class CrawlerSubscription<T: Subscriber>: Subscription where T.Input == U
   }
 
   public func request(_ demand: Subscribers.Demand) {
+    let callback: (URL) -> Void = { url in
+        self.subscriber?.receive(url)
+    }
+
     // demand.max
-    let crawler = Crawler(startURL: startURL, maximumPagesToVisit: maxNumberOfPagesToVisit, wordToSearch: wordToSearch) { url in
-      self.subscriber?.receive(url)
+    let crawler = Crawler(startURL: startURL, maximumPagesToVisit: maxNumberOfPagesToVisit, wordToSearch: wordToSearch, callback: callback) {
+      self.subscriber?.receive(completion: .finished)
     }
     crawler.crawl()
   }
@@ -66,12 +70,14 @@ class Crawler {
   private lazy var visitedPages: Set<URL> = []
   private var pagesToVisit: Set<URL> = []
   private let callback: (URL) -> Void
+  private let completion: () -> Void
 
-  public init(startURL: URL, maximumPagesToVisit: Int, wordToSearch word: String, callback: @escaping (URL) -> Void) {
+  public init(startURL: URL, maximumPagesToVisit: Int, wordToSearch word: String, callback: @escaping (URL) -> Void, completion: @escaping () -> Void) {
     self.maximumPagesToVisit = maximumPagesToVisit
     self.pagesToVisit = [startURL]
     self.wordToSearch = word
     self.callback = callback
+    self.completion = completion
   }
 
   public func start() {
@@ -80,11 +86,13 @@ class Crawler {
 
   func crawl() {
     guard visitedPages.count <= maximumPagesToVisit else {
-      print("🏁 Reached max number of pages to visit")
+      completion()
+//      print("🏁 Reached max number of pages to visit")
       return
     }
     guard let pageToVisit = pagesToVisit.popFirst() else {
-      print("🏁 No more pages to visit")
+      completion()
+//      print("🏁 No more pages to visit")
       return
     }
     if visitedPages.contains(pageToVisit) {

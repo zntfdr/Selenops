@@ -20,14 +20,11 @@ final class Executor {
     )
 
     let cancellable = publisher
-      .map{ url in
-        print(url)
-        return url.absoluteString
-    }
-    .sink(receiveCompletion: { completion in
+      .sink(receiveCompletion: { completion in
       print("it ded")
-    }) { value in
-      print(value)
+        exit(EXIT_SUCCESS)
+    }) { url in
+      print("✅ word found at \(url.absoluteString)")
     }
 
     //    let crawler = Crawler(startURL: parameters.startUrl,
