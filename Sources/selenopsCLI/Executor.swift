@@ -10,6 +10,9 @@ import SelenopsCore
 
 final class Executor {
   func run(parameters: Parameters) {
+    print("✅ Searching for '\(parameters.wordToSearch)'")
+    print("✅ Starting from '\(parameters.startUrl.absoluteString)'")
+
     let publisher = CrawlerPublisher(
       startURL: parameters.startUrl,
       wordToSearch: parameters.wordToSearch,
