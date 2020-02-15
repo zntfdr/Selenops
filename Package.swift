@@ -5,6 +5,9 @@ import PackageDescription
 
 let package = Package(
     name: "selenops",
+    platforms: [
+      .macOS(.v10_15)
+    ],
     dependencies: [
       .package(url: "https://github.com/apple/swift-tools-support-core.git",
                from: "0.0.1")
