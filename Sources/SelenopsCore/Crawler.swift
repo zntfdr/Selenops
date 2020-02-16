@@ -63,7 +63,7 @@ open class Crawler {
     startURL: URL,
     maximumPagesToVisit: Int,
     wordToSearch word: String,
-    visitingCallback: ((URL) -> Void)?,
+    visitingCallback: ((URL) -> Void)? = nil,
     wordFoundCallback: @escaping (URL) -> Void,
     completion: @escaping (Int) -> Void
   ) {
