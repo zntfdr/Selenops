@@ -13,6 +13,9 @@ import Foundation
 /// given `wordToSearch` and report its findings.
 open class Crawler {
 
+  /// The starting page URL.
+  let startURL: URL
+
   /// The maximum number of pages that the instance will visit.
   ///
   /// - Note: If not enough links are found, the crawler will stop its execution
@@ -64,8 +67,9 @@ open class Crawler {
     wordFoundCallback: @escaping (URL) -> Void,
     completion: @escaping (Int) -> Void
   ) {
-    self.maximumPagesToVisit = maximumPagesToVisit
+    self.startURL = startURL
     self.pagesToVisit = [startURL]
+    self.maximumPagesToVisit = maximumPagesToVisit
     self.wordToSearch = word
     self.wordFoundCallback = wordFoundCallback
     self.visitingCallback = visitingCallback
