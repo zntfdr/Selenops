@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SelenopsCore
+import Selenops
 
 final class Executor {
   func run(parameters: Parameters) {

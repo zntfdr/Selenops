@@ -1,3 +1,3 @@
 install:
 	swift build -c release
-	install .build/release/selenops /usr/local/bin/selenops
+	install .build/release/selenops-cli /usr/local/bin/selenops
