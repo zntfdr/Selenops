@@ -67,7 +67,7 @@ Selenops also comes with a command line tool that showcases its functionality.
 
 To install it, clone the project and run make:
 
-```
+```shell
 $ git clone https://github.com/zntfdr/Selenops.git
 $ cd Selenops
 $ make
