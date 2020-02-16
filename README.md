@@ -17,7 +17,7 @@ Welcome to **Selenops**, a simple Swift Web Crawler.
 ## Usage
 
 ```swift
-import SelenopsCore
+import Selenops
 
 // Initialize crawler.
 let crawler = Crawler(
@@ -52,7 +52,7 @@ Selenops is distributed via the [Swift Package Manager](https://swift.org/packag
      targets: [
         .target(
             ...
-            dependencies: ["SelenopsCore"])
+            dependencies: ["Selenops"])
      ],
      ...
  )
