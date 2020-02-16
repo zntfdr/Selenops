@@ -61,7 +61,7 @@ Selenops is distributed via the [Swift Package Manager](https://swift.org/packag
 
 ## Command line tool
 <p align="center">
-    <img src="cli-example.gif" width="580" max-width="90%" alt="Swift Web Crawler in action" />
+    <img src="cli-example.gif" max-width="90%" alt="Swift Web Crawler in action" />
 
 Selenops also comes with a command line tool that showcases its functionality.
 
