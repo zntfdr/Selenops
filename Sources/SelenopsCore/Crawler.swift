@@ -104,6 +104,7 @@ open class Crawler {
   }
 
   /// Tells the crawler to visit the given `url` page.
+  /// 
   /// - Parameter url: The page we want to visit.
   func visit(page url: URL) {
     visitedPages.insert(url)
