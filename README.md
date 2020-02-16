@@ -57,7 +57,7 @@ Selenops is distributed via the [Swift Package Manager](https://swift.org/packag
      ...
  )
 ```
-  and then use `import SelenopsCore` whenever necessary.
+  ...and then use `import SelenopsCore` whenever necessary.
 
 ## Command line tool
 <p align="center">
