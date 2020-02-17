@@ -135,9 +135,10 @@ open class Crawler {
       delegate?.crawler(self, didFindWordAt: url)
     }
 
-    func collectLinks(from document: String) -> [URL] {
-      let elements: [Element] = (try? SwiftSoup.parse(document, url.absoluteString).select("a").array()) ?? []
-      return elements.compactMap({ try? $0.absUrl("href") }).compactMap(URL.init(string:))
+    func collectLinks(from webpage: String) -> [URL] {
+      let document: Document? = try? SwiftSoup.parse(webpage, url.absoluteString)
+      let anchors: [Element] = (try? document?.select("a").array()) ?? []
+      return anchors.compactMap({ try? $0.absUrl("href") }).compactMap(URL.init(string:))
     }
 
     find(word: wordToSearch, from: document)
