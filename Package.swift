@@ -19,9 +19,6 @@ let package = Package(
             dependencies: ["SwiftSoup"]),
         .target(
             name: "selenopsCLI",
-            dependencies: ["Selenops", "SwiftToolsSupport"]),
-        .testTarget(
-            name: "selenopsTests",
-            dependencies: ["selenopsCLI"])
+            dependencies: ["Selenops", "SwiftToolsSupport"])
     ]
 )
