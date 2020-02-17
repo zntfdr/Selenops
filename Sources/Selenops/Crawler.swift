@@ -7,9 +7,20 @@
 
 import Foundation
 
+/// Receiver of crawler-related events.
 public protocol CrawlerDelegate: AnyObject {
-  func willVisit(url: URL)
-  func wordFound(at url: URL)
+
+  /// Called whenever the crawler is about to visit a new webpage.
+  func crawler(_ crawler: Crawler, willVisitUrl url: URL)
+
+  /// Called whenever the crawler finds the searched word in a webpage.
+  ///
+  /// - Note: This call is fired only (up to) one time per webpage, regardless
+  ///   of how many times the word is found in that webpage.
+  func crawler(_ crawler: Crawler, didFindWordAt url: URL)
+
+  /// Called once the crawler ends its execution.
+  func crawlerDidFinish(_ crawler: Crawler)
 }
 
 /// A web crawler.
@@ -36,16 +47,8 @@ open class Crawler {
   /// The urls of pages found during crawling, but yet to visit.
   var pagesToVisit: Set<URL>
 
-  /// This callback is fired each time the crawler is about to visit a new
-  /// webpage.
-  let visitingCallback: ((URL) -> Void)?
-
-  /// This callback is fired each time the parser finds `wordToSearch` in a
-  /// web page (fired up to one time per page).
-  let wordFoundCallback: (URL) -> Void
-
-  /// The completion block called when the crawler ends its execution.
-  let completion: (Int) -> Void
+  /// The object that acts as the delegate of the crawler.
+  public weak var delegate: CrawlerDelegate?
 
   /// The current `URLSessionDataTask`, if any.
   var currentTask: URLSessionDataTask?
@@ -59,26 +62,15 @@ open class Crawler {
   ///   - startURL: The starting page URL (must contain http:// or https://).
   ///   - maximumPagesToVisit: The maximum number of web pages to visit.
   ///   - word: The word to look for.
-  ///   - visitingCallback: Fired each time the instance is about to visit a new
-  ///     webpage.
-  ///   - wordFoundCallback: Fired each time the instance finds `wordToSearch`
-  ///     in a web page (fired up to one time per page).
-  ///   - completion: Called when the instance ends its execution.
   public init(
     startURL: URL,
     maximumPagesToVisit: Int,
-    wordToSearch word: String,
-    visitingCallback: ((URL) -> Void)? = nil,
-    wordFoundCallback: @escaping (URL) -> Void,
-    completion: @escaping (Int) -> Void
+    wordToSearch word: String
   ) {
     self.startURL = startURL
     self.pagesToVisit = [startURL]
     self.maximumPagesToVisit = maximumPagesToVisit
     self.wordToSearch = word
-    self.wordFoundCallback = wordFoundCallback
-    self.visitingCallback = visitingCallback
-    self.completion = completion
   }
 
   /// Trigger the instance to start crawling the web.
@@ -89,7 +81,7 @@ open class Crawler {
   /// Immediately ends the crawling process.
   public func cancel() {
     currentTask?.cancel()
-    completion(visitedPages.count)
+    delegate?.crawlerDidFinish(self)
   }
 
   /// Starts a new crawling cycle.
@@ -97,7 +89,7 @@ open class Crawler {
     guard
       visitedPages.count < maximumPagesToVisit,
       let pageToVisit = pagesToVisit.popFirst() else {
-      completion(visitedPages.count)
+      delegate?.crawlerDidFinish(self)
       return
     }
 
@@ -122,7 +114,7 @@ open class Crawler {
       self?.parse(document: document, url: url)
     }
 
-    visitingCallback?(url)
+    delegate?.crawler(self, willVisitUrl: url)
     currentTask?.resume()
   }
 
@@ -134,7 +126,7 @@ open class Crawler {
   func parse(document: String, url: URL) {
     func find(word: String, from document: String) {
       guard document.contains(word) else { return }
-      wordFoundCallback(url)
+      delegate?.crawler(self, didFindWordAt: url)
     }
 
     func collectLinks(from document: String) -> [URL] {
