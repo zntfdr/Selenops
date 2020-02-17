@@ -24,6 +24,11 @@ public protocol CrawlerDelegate: AnyObject {
   func crawlerDidFinish(_ crawler: Crawler)
 }
 
+extension CrawlerDelegate {
+  // Make crawler(crawler:url:) optional.
+  func crawler(_ crawler: Crawler, willVisitUrl url: URL) {}
+}
+
 /// A web crawler.
 ///
 /// Given a proper `startURL`, this object will crawl the web looking for the
