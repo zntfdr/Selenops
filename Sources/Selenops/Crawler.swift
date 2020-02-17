@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftSoup
 
 /// Receiver of crawler-related events.
 public protocol CrawlerDelegate: AnyObject {
@@ -130,11 +131,8 @@ open class Crawler {
     }
 
     func collectLinks(from document: String) -> [URL] {
-      let types: NSTextCheckingResult.CheckingType = .link
-      let detector = try? NSDataDetector(types: types.rawValue)
-      let range = NSRange(0..<document.count)
-      let matches = detector?.matches(in: document, options: [], range: range)
-      return matches?.compactMap { $0.url } ?? []
+      let elements: [Element] = (try? SwiftSoup.parse(document, url.absoluteString).select("a").array()) ?? []
+      return elements.compactMap({ try? $0.absUrl("href") }).compactMap(URL.init(string:))
     }
 
     find(word: wordToSearch, from: document)
