@@ -116,8 +116,8 @@ open class Crawler {
       defer { self?.crawl() }
       guard
         let data = data,
-        let document = String(data: data, encoding: .utf8) else { return }
-      self?.parse(document: document, url: url)
+        let webpage = String(data: data, encoding: .utf8) else { return }
+      self?.parse(webpage, url: url)
     }
 
     delegate?.crawler(self, willVisitUrl: url)
@@ -127,9 +127,9 @@ open class Crawler {
   /// Parses the given document.
   ///
   /// - Parameters:
-  ///   - document: The content to parse.
+  ///   - webpage: The content to parse.
   ///   - url: The url associated with the document.
-  func parse(document: String, url: URL) {
+  func parse(_ webpage: String, url: URL) {
     func find(word: String, from document: String) {
       guard document.contains(word) else { return }
       delegate?.crawler(self, didFindWordAt: url)
@@ -141,7 +141,7 @@ open class Crawler {
       return anchors.compactMap({ try? $0.absUrl("href") }).compactMap(URL.init(string:))
     }
 
-    find(word: wordToSearch, from: document)
-    collectLinks(from: document).forEach { pagesToVisit.insert($0) }
+    find(word: wordToSearch, from: webpage)
+    collectLinks(from: webpage).forEach { pagesToVisit.insert($0) }
   }
 }
