@@ -10,11 +10,13 @@ let package = Package(
         .executable(name: "selenops-cli", targets: ["selenopsCLI"])
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-tools-support-core.git",
-                 from: "0.0.1")
+        .package(url: "https://github.com/apple/swift-tools-support-core.git", from: "0.0.1"),
+        .package(url: "https://github.com/scinfu/SwiftSoup.git", from: "2.3.0")
     ],
     targets: [
-        .target(name: "Selenops"),
+        .target(
+            name: "Selenops",
+            dependencies: ["SwiftSoup"]),
         .target(
             name: "selenopsCLI",
             dependencies: ["Selenops", "SwiftToolsSupport"]),
