@@ -26,7 +26,7 @@ import Selenops
 let crawler = Crawler(
   startURL: URL(string: "https://fivestars.blog/")!,
   maximumPagesToVisit: 10,
-  wordToSearch: "Swift",
+  wordToSearch: "Swift"
 )
 
 // Set delegate.
