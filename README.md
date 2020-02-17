@@ -16,6 +16,9 @@ Welcome to **Selenops**, a simple Swift Web Crawler.
 
 ## Usage
 
+Create an object that conforms to `CrawlerDelegate`:
+
+
 ```swift
 import Selenops
 
@@ -24,13 +27,10 @@ let crawler = Crawler(
   startURL: URL(string: "https://fivestars.blog/")!,
   maximumPagesToVisit: 10,
   wordToSearch: "Swift",
-  wordFoundCallback: { url in
-    print("✅ Word found at: \(url.absoluteString)")
-  },
-  completion: { visitedPagesNumber in
-    print("🏁 Visited pages: \(visitedPagesNumber)")
-  }
 )
+
+// Set delegate.
+crawler.delegate = self // Needs to conform to CrawlerDelegate
 
 // Start crawling!
 crawler.start()
