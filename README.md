@@ -12,7 +12,7 @@
     </a>
 </p>
 
-Welcome to **Selenops**, a simple Swift Web Crawler.
+Welcome to **Selenops**, a Swift Web Crawler.
 
 ## Usage
 
