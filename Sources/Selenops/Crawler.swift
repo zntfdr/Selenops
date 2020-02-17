@@ -7,6 +7,11 @@
 
 import Foundation
 
+public protocol CrawlerDelegate: AnyObject {
+  func willVisit(url: URL)
+  func wordFound(at url: URL)
+}
+
 /// A web crawler.
 ///
 /// Given a proper `startURL`, this object will crawl the web looking for the
