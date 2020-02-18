@@ -130,18 +130,18 @@ open class Crawler {
   ///   - webpage: The content to parse.
   ///   - url: The url associated with the document.
   func parse(_ webpage: String, url: URL) {
-    func find(word: String, from document: String) {
-      guard document.contains(word) else { return }
+    let document: Document? = try? SwiftSoup.parse(webpage, url.absoluteString)
+
+    // Find word in webpage.
+    if
+      let webpageText: String = try? document?.text(),
+      webpageText.contains(wordToSearch) {
       delegate?.crawler(self, didFindWordAt: url)
     }
 
-    func collectLinks(from webpage: String) -> [URL] {
-      let document: Document? = try? SwiftSoup.parse(webpage, url.absoluteString)
-      let anchors: [Element] = (try? document?.select("a").array()) ?? []
-      return anchors.compactMap({ try? $0.absUrl("href") }).compactMap(URL.init(string:))
-    }
-
-    find(word: wordToSearch, from: webpage)
-    collectLinks(from: webpage).forEach { pagesToVisit.insert($0) }
+    // Collect links.
+    let anchors: [Element] = (try? document?.select("a").array()) ?? []
+    let links: [URL] = anchors.compactMap({ try? $0.absUrl("href") }).compactMap(URL.init(string:))
+    pagesToVisit.formUnion(links)
   }
 }
