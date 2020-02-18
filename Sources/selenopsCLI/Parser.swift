@@ -8,9 +8,7 @@
 import Foundation
 import TSCUtility
 
-/// Parses the input from the command line.
-///
-/// It also declares what are all the possible argument types.
+/// Parses the command line input.
 final class Parser {
   private let arguments: [String]
 
