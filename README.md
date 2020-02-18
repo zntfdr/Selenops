@@ -47,7 +47,7 @@ Selenops is distributed via the [Swift Package Manager](https://swift.org/packag
  let package = Package(
      ...
      dependencies: [
-         .package(url: "https://github.com/zntfdr/Selenops.git", from: "1.0.0")
+         .package(url: "https://github.com/zntfdr/Selenops.git", from: "2.0.0")
      ],
      targets: [
         .target(
