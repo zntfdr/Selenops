@@ -14,6 +14,8 @@
 
 Welcome to **Selenops**, a Swift Web Crawler.
 
+Given a webpage url and a word to search, Selenops will look for said word in that page, and all pages linked in there, recursively.
+
 ## Usage
 
 Create an object that conforms to `CrawlerDelegate`:
@@ -30,7 +32,7 @@ let crawler = Crawler(
 )
 
 // Set delegate.
-crawler.delegate = self // Needs to conform to CrawlerDelegate
+crawler.delegate = ... // Needs to conform to CrawlerDelegate
 
 // Start crawling!
 crawler.start()
