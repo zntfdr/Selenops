@@ -11,14 +11,12 @@ import TSCUtility
 extension Foundation.URL: ArgumentKind {
 
   public init(argument: String) throws {
-    if let url = URL(string: argument) {
-      self = url
-    } else {
+    guard let url = URL(string: argument) else {
       throw ArgumentConversionError.unknown(value: argument)
     }
+
+    self = url
   }
 
-  public static var completion: ShellCompletion {
-    .none
-  }
+  public static var completion: ShellCompletion = .none
 }
