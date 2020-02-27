@@ -46,7 +46,7 @@ final class Executor: CrawlerDelegate {
     animation.update(
       step: visitedPagesNumber,
       total: parameters.maximumPagesToVisit,
-      text: "🔎 Visiting: \(url)"
+      text: "Fetching \(url)"
     )
   }
 
