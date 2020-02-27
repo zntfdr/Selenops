@@ -15,6 +15,7 @@ final class Executor: CrawlerDelegate {
     print("✅ Searching for: \(parameters.wordToSearch)")
     print("✅ Starting from: \(parameters.startUrl.absoluteString)")
     print("✅ Maximum number of pages to visit: \(parameters.maximumPagesToVisit)")
+    print("Word found at:")
 
     let crawler = Crawler(
       startURL: parameters.startUrl,
@@ -37,7 +38,7 @@ final class Executor: CrawlerDelegate {
   }
 
   func crawler(_ crawler: Crawler, didFindWordAt url: URL) {
-    print("✅ Word found at: \(url.absoluteString)")
+    print("✅ \(url.absoluteString)")
   }
 
   func crawlerDidFinish(_ crawler: Crawler) {
