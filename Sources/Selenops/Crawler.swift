@@ -11,6 +11,11 @@ import SwiftSoup
 /// Receiver of crawler-related events.
 public protocol CrawlerDelegate: AnyObject {
 
+  /// Called before the crawler visits a webpage.
+  ///
+  /// A skipped webpage is not considered among the visited pages.
+  func crawler(_ crawler: Crawler, shouldVisitUrl url: URL) -> Bool
+
   /// Called whenever the crawler is about to visit a new webpage.
   func crawler(_ crawler: Crawler, willVisitUrl url: URL)
 
@@ -24,8 +29,11 @@ public protocol CrawlerDelegate: AnyObject {
   func crawlerDidFinish(_ crawler: Crawler)
 }
 
-extension CrawlerDelegate {
-  // Make crawler(crawler:url:) optional.
+public extension CrawlerDelegate {
+  // Make crawler(crawler:shouldVisitUrl:) optional.
+  func crawler(_ crawler: Crawler, shouldVisitUrl url: URL) -> Bool { true }
+
+  // Make crawler(crawler:willVisitUrl:) optional.
   func crawler(_ crawler: Crawler, willVisitUrl url: URL) {}
 }
 
@@ -102,7 +110,11 @@ open class Crawler {
     if visitedPages.contains(pageToVisit) {
       crawl()
     } else {
-      visit(page: pageToVisit)
+      if delegate?.crawler(self, shouldVisitUrl: pageToVisit) == true {
+        visit(page: pageToVisit)
+      } else {
+        crawl()
+      }
     }
   }
 
