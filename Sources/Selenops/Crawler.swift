@@ -107,8 +107,7 @@ open class Crawler {
       return
     }
 
-    if
-      visitedPages.contains(pageToVisit) {
+    if visitedPages.contains(pageToVisit) {
       crawl()
     } else {
       if delegate?.crawler(self, shouldVisitUrl: pageToVisit) == true {
