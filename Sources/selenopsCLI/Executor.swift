@@ -13,26 +13,31 @@ import TSCUtility
 final class Executor: CrawlerDelegate {
   var visitedPagesNumber = 0
   let animation = NinjaProgressAnimation(stream: stdoutStream)
-  let parameters: Parameters
 
-  init(parameters: Parameters) {
-    self.parameters = parameters
+  let startUrl: Foundation.URL
+  let wordToSearch: String
+  let maximumPagesToVisit: Int
+
+  init(
+    startUrl: Foundation.URL,
+    wordToSearch: String,
+    maximumPagesToVisit: Int
+  ) {
+    self.startUrl = startUrl
+    self.wordToSearch = wordToSearch
+    self.maximumPagesToVisit = maximumPagesToVisit
   }
 
   func run() {
-    print("✅ Searching for: \(parameters.wordToSearch)")
-    print("✅ Starting from: \(parameters.startUrl.absoluteString)")
-    print("✅ Maximum number of pages to visit: \(parameters.maximumPagesToVisit)")
     print("Word found at:")
 
     let crawler = Crawler(
-      startURL: parameters.startUrl,
-      maximumPagesToVisit: parameters.maximumPagesToVisit,
-      wordToSearch: parameters.wordToSearch
+      startURL: startUrl,
+      maximumPagesToVisit: maximumPagesToVisit,
+      wordToSearch: wordToSearch
     )
 
     crawler.delegate = self
-
     crawler.start()
 
     dispatchMain()
@@ -45,7 +50,7 @@ final class Executor: CrawlerDelegate {
     animation.clear()
     animation.update(
       step: visitedPagesNumber,
-      total: parameters.maximumPagesToVisit,
+      total: maximumPagesToVisit,
       text: "Fetching \(url)"
     )
   }
