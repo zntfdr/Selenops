@@ -34,7 +34,6 @@ final class Executor: CrawlerDelegate {
     )
 
     crawler.delegate = self
-
     crawler.start()
 
     dispatchMain()

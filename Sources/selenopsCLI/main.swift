@@ -7,30 +7,34 @@ struct Selenops: ParsableCommand {
   )
 
   @Option(
-    name: .shortAndLong,
+    name: [.short, .customLong("start")],
     help: "The starting page URL (must have http:// or https:// prefix)."
   )
-  var start: URL //startUrl
+  var startUrl: URL
 
   @Option(
-    name: .shortAndLong,
+    name: [.short, .customLong("word")],
     help: "The word to look for."
   )
-  var word: String //wordToSearch
+  var wordToSearch: String
 
   @Option(
-    name: .shortAndLong,
+    name: [.short, .customLong("max")],
     default: 10,
     help: "The maximum number of pages to visit."
   )
-  var max: Int //maximumPagesToVisit
+  var maximumPagesToVisit: Int
 
   func run() throws {
-    print("✅ Searching for: \(word)")
-    print("✅ Starting from: \(start.absoluteString)")
-    print("✅ Maximum number of pages to visit: \(max)")
+    print("✅ Searching for: \(wordToSearch)")
+    print("✅ Starting from: \(startUrl.absoluteString)")
+    print("✅ Maximum number of pages to visit: \(maximumPagesToVisit)")
 
-    Executor(startUrl: start, wordToSearch: word, maximumPagesToVisit: max).run()
+    Executor(
+      startUrl: startUrl,
+      wordToSearch: wordToSearch,
+      maximumPagesToVisit: maximumPagesToVisit
+    ).run()
   }
 }
 
