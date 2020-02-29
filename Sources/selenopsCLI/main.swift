@@ -1,13 +1,18 @@
 import Foundation
-import TSCUtility
+import ArgumentParser
 
-do {
-  let parameters = try Parser().parse()
-  Executor(parameters: parameters).run()
-} catch ArgumentParserError.expectedValue(let value) {
-    print("Missing value for argument \(value).")
-} catch ArgumentParserError.expectedArguments(let parser, let stringArray) {
-    print("Parser: \(parser) Missing arguments: \(stringArray.joined()).")
-} catch {
-    print(error.localizedDescription)
+struct Selenops: ParsableCommand {
+  @Option(name: .shortAndLong) var start: URL //startUrl
+  @Option(name: .shortAndLong) var word: String //wordToSearch
+  @Option(name: .shortAndLong, default: 10) var max: Int //maximumPagesToVisit
+
+  func run() throws {
+    print("✅ Searching for: \(word)")
+    print("✅ Starting from: \(start.absoluteString)")
+    print("✅ Maximum number of pages to visit: \(max)")
+
+    Executor(startUrl: start, wordToSearch: word, maximumPagesToVisit: max).run()
+  }
 }
+
+Selenops.main()

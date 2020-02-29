@@ -8,6 +8,7 @@
 import Foundation
 import TSCUtility
 
+/*
 /// Parses the command line input.
 final class Parser {
   private let arguments: [String]
@@ -59,3 +60,4 @@ final class Parser {
     )
   }
 }
+*/

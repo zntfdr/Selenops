@@ -20,6 +20,6 @@ let package = Package(
             dependencies: ["SwiftSoup"]),
         .target(
             name: "selenopsCLI",
-            dependencies: ["Selenops", "SwiftToolsSupport"])
+            dependencies: ["ArgumentParser", "Selenops", "SwiftToolsSupport"])
     ]
 )
