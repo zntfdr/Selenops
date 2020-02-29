@@ -147,7 +147,7 @@ open class Crawler {
     // Find word in webpage.
     if
       let webpageText: String = try? document?.text(),
-      webpageText.contains(wordToSearch) {
+      webpageText.range(of: wordToSearch, options: .caseInsensitive) != nil {
       delegate?.crawler(self, didFindWordAt: url)
     }
 
