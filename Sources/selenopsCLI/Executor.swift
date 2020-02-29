@@ -18,7 +18,11 @@ final class Executor: CrawlerDelegate {
   let wordToSearch: String
   let maximumPagesToVisit: Int
 
-  init(startUrl: Foundation.URL, wordToSearch: String, maximumPagesToVisit: Int) {
+  init(
+    startUrl: Foundation.URL,
+    wordToSearch: String,
+    maximumPagesToVisit: Int
+  ) {
     self.startUrl = startUrl
     self.wordToSearch = wordToSearch
     self.maximumPagesToVisit = maximumPagesToVisit
