@@ -18,9 +18,6 @@ Given a webpage url and a word to search, Selenops will look for said word in th
 
 ## Usage
 
-Create an object that conforms to `CrawlerDelegate`:
-
-
 ```swift
 import Selenops
 
@@ -28,7 +25,7 @@ import Selenops
 let crawler = Crawler(
   startURL: URL(string: "https://fivestars.blog/")!,
   maximumPagesToVisit: 10,
-  wordToSearch: "Swift"
+  wordToSearch: "Swift" // Specify the word to search here.
 )
 
 // Set delegate.
@@ -37,6 +34,8 @@ crawler.delegate = ... // Needs to conform to CrawlerDelegate
 // Start crawling!
 crawler.start()
 ```
+
+The `crawler` delegate will get information such as visited webpages, and in which webpages the specified word has been found.
 
 ## Installation
 
