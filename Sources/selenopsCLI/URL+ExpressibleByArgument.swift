@@ -1,10 +1,3 @@
-//
-//  URL+ExpressibleByArgument.swift
-//  
-//
-//  Created by Federico Zanetello on 2/12/20.
-//
-
 import Foundation
 import ArgumentParser
 
